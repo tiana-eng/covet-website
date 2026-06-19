@@ -284,38 +284,6 @@ section {
   flex-shrink: 0;
 }
 
-.btn-apple-text {
-  white-space: nowrap;
-}
-
-.btn-apple-text--long {
-  display: inline;
-}
-
-.btn-apple-text--short {
-  display: none;
-}
-
-@media (min-width: 769px) {
-  .btn-apple-text--long {
-    display: inline;
-  }
-
-  .btn-apple-text--short {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .btn-apple-text--long {
-    display: none;
-  }
-
-  .btn-apple-text--short {
-    display: inline;
-  }
-}
-
 /* --- Hero --- */
 .hero {
   min-height: 100vh;
@@ -366,6 +334,7 @@ section {
 
 .hero h1 {
   margin-bottom: 1.5rem;
+  text-wrap: balance;
 }
 
 .hero-sub {
@@ -821,6 +790,11 @@ section {
 
   .hero-mockup-image {
     max-width: 360px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 7.5vw, 2.75rem);
+    line-height: 1.28;
   }
 
   .btn-apple {
