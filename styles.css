@@ -274,12 +274,18 @@ section {
   color: var(--bg-ivory);
   padding: 1.125rem 2.25rem;
   font-size: 1rem;
+  white-space: nowrap;
 }
 
 .btn-apple svg {
   width: 20px;
   height: 20px;
   fill: currentColor;
+  flex-shrink: 0;
+}
+
+.btn-apple-label--short {
+  display: none;
 }
 
 /* --- Hero --- */
@@ -789,6 +795,24 @@ section {
     max-width: 360px;
   }
 
+  .btn-apple {
+    padding: 0.9375rem 1.625rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-apple svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .btn-apple-label--full {
+    display: none;
+  }
+
+  .btn-apple-label--short {
+    display: inline;
+  }
+
   .steps-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -835,8 +859,15 @@ section {
 }
 
 @media (max-width: 480px) {
-  .btn {
+  .btn-primary {
     width: 100%;
+  }
+
+  .btn-apple {
+    width: auto;
+    max-width: 100%;
+    padding: 0.875rem 1.375rem;
+    font-size: 0.8125rem;
   }
 
   .hero-sub {
