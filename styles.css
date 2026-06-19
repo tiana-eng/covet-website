@@ -797,6 +797,13 @@ section {
     line-height: 1.28;
   }
 
+  .final-cta h2 {
+    font-size: clamp(1.625rem, 5.8vw, 2rem);
+    line-height: 1.34;
+    text-wrap: balance;
+    max-width: 11.75em;
+  }
+
   .btn-apple {
     padding: 0.9375rem 1.625rem;
     font-size: 0.875rem;
