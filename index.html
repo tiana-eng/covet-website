@@ -36,10 +36,7 @@
           <span class="hero-eyebrow animate">AI Shopping Assistant</span>
           <h1 class="animate animate-delay-1">Stop checking prices. Covet watches for you.</h1>
           <p class="hero-sub animate animate-delay-2">Save products you love and let your AI shopping assistant monitor prices, track sales, and tell you when it's time to buy.</p>
-          <a href="#" class="btn btn-apple animate animate-delay-3" aria-label="Coming Soon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25-3.9 43.7 7.4 68.8 7.4 24.3 0 44.1-7.4 68.8-7.4 48.1 1.5 94.3-88.5 107-125.2-39.7-18.7-62.5-47.2-71.3-78.6zM256.8 79.5c29.1-35.1 25.7-66.8 25-78.5-24.8 1.4-53.6 16.5-70.9 35.6-18.9 20.8-33.5 54.3-29.3 86.2 31.1 2.4 62.9-19.4 75.2-43.3z"/></svg>
-            Coming Soon
-          </a>
+          <button type="button" class="btn btn-apple join-waitlist-btn animate animate-delay-3">Join Waitlist</button>
         </div>
 
         <div class="hero-visual">
@@ -136,10 +133,7 @@
         <div class="final-cta-inner">
           <h2>The products you covet. The prices you've been waiting for.</h2>
           <p>Join the waitlist and be first to know when Covet launches on the App Store.</p>
-          <a href="#" class="btn btn-apple" aria-label="Coming Soon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25-3.9 43.7 7.4 68.8 7.4 24.3 0 44.1-7.4 68.8-7.4 48.1 1.5 94.3-88.5 107-125.2-39.7-18.7-62.5-47.2-71.3-78.6zM256.8 79.5c29.1-35.1 25.7-66.8 25-78.5-24.8 1.4-53.6 16.5-70.9 35.6-18.9 20.8-33.5 54.3-29.3 86.2 31.1 2.4 62.9-19.4 75.2-43.3z"/></svg>
-            Coming Soon
-          </a>
+          <button type="button" class="btn btn-apple join-waitlist-btn">Join Waitlist</button>
         </div>
       </div>
     </section>
@@ -158,6 +152,25 @@
       </div>
     </div>
   </footer>
+
+  <div class="waitlist-modal" id="waitlistModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="waitlistModalTitle">
+    <div class="waitlist-modal__overlay" data-close-waitlist></div>
+    <div class="waitlist-modal__panel">
+      <button type="button" class="waitlist-modal__close" aria-label="Close waitlist" data-close-waitlist>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="waitlist-modal__header">
+        <img src="COVET LOGO/1.png" alt="" class="waitlist-modal__logo" aria-hidden="true">
+        <h2 id="waitlistModalTitle" class="waitlist-modal__title">Join the Waitlist</h2>
+        <p class="waitlist-modal__subtitle">Be first to know when Covet launches.</p>
+      </div>
+      <div class="waitlist-modal__embed">
+        <script async data-uid="0a86eaaeda" src="https://covet-ai.kit.com/0a86eaaeda/index.js"></script>
+      </div>
+    </div>
+  </div>
 
   <script>
     const header = document.getElementById('header');
@@ -178,6 +191,42 @@
         navLinks.classList.remove('open');
         navToggle.setAttribute('aria-expanded', 'false');
       });
+    });
+
+    const waitlistModal = document.getElementById('waitlistModal');
+    const waitlistTriggers = document.querySelectorAll('.join-waitlist-btn');
+    const waitlistCloseTargets = document.querySelectorAll('[data-close-waitlist]');
+    let waitlistLastFocus = null;
+
+    function openWaitlistModal() {
+      waitlistLastFocus = document.activeElement;
+      waitlistModal.classList.add('is-open');
+      waitlistModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('waitlist-open');
+      waitlistModal.querySelector('.waitlist-modal__close').focus();
+    }
+
+    function closeWaitlistModal() {
+      waitlistModal.classList.remove('is-open');
+      waitlistModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('waitlist-open');
+      if (waitlistLastFocus) {
+        waitlistLastFocus.focus();
+      }
+    }
+
+    waitlistTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', openWaitlistModal);
+    });
+
+    waitlistCloseTargets.forEach((target) => {
+      target.addEventListener('click', closeWaitlistModal);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && waitlistModal.classList.contains('is-open')) {
+        closeWaitlistModal();
+      }
     });
   </script>
 
