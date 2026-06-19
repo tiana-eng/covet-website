@@ -284,8 +284,36 @@ section {
   flex-shrink: 0;
 }
 
-.btn-apple-label--short {
+.btn-apple-text {
+  white-space: nowrap;
+}
+
+.btn-apple-text--long {
+  display: inline;
+}
+
+.btn-apple-text--short {
   display: none;
+}
+
+@media (min-width: 769px) {
+  .btn-apple-text--long {
+    display: inline;
+  }
+
+  .btn-apple-text--short {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-apple-text--long {
+    display: none;
+  }
+
+  .btn-apple-text--short {
+    display: inline;
+  }
 }
 
 /* --- Hero --- */
@@ -803,14 +831,6 @@ section {
   .btn-apple svg {
     width: 18px;
     height: 18px;
-  }
-
-  .btn-apple-label--full {
-    display: none;
-  }
-
-  .btn-apple-label--short {
-    display: inline;
   }
 
   .steps-grid {
