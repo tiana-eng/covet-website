@@ -161,13 +161,29 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
         </svg>
       </button>
-      <div class="waitlist-modal__header">
-        <img src="COVET LOGO/1.png" alt="" class="waitlist-modal__logo" aria-hidden="true">
-        <h2 id="waitlistModalTitle" class="waitlist-modal__title">Join the Waitlist</h2>
-        <p class="waitlist-modal__subtitle">Be first to know when Covet launches.</p>
+      <div id="waitlistFormView">
+        <div class="waitlist-modal__header">
+          <img src="COVET LOGO/1.png" alt="" class="waitlist-modal__logo" aria-hidden="true">
+          <h2 id="waitlistModalTitle" class="waitlist-modal__title">Join The Waitlist</h2>
+          <p class="waitlist-modal__subtitle">Be first to know when Covet launches.</p>
+        </div>
+        <form id="waitlistForm" class="waitlist-form" novalidate>
+          <label class="waitlist-form__label" for="waitlistEmail">Email Address</label>
+          <input
+            type="email"
+            id="waitlistEmail"
+            name="email_address"
+            class="waitlist-form__input"
+            placeholder="Email Address"
+            autocomplete="email"
+            required
+          >
+          <p class="waitlist-form__error" id="waitlistError" hidden role="alert"></p>
+          <button type="submit" class="waitlist-form__submit">Join Waitlist</button>
+        </form>
       </div>
-      <div class="waitlist-modal__embed">
-        <script async data-uid="0a86eaaeda" src="https://covet-ai.kit.com/0a86eaaeda/index.js"></script>
+      <div class="waitlist-modal__success" id="waitlistSuccessView" hidden aria-live="polite">
+        <p class="waitlist-modal__success-text" tabindex="-1">You're On The List ✨</p>
       </div>
     </div>
   </div>
@@ -196,7 +212,22 @@
     const waitlistModal = document.getElementById('waitlistModal');
     const waitlistTriggers = document.querySelectorAll('.join-waitlist-btn');
     const waitlistCloseTargets = document.querySelectorAll('[data-close-waitlist]');
+    const waitlistForm = document.getElementById('waitlistForm');
+    const waitlistFormView = document.getElementById('waitlistFormView');
+    const waitlistSuccessView = document.getElementById('waitlistSuccessView');
+    const waitlistError = document.getElementById('waitlistError');
+    const waitlistEmail = document.getElementById('waitlistEmail');
+    const KIT_FORM_ENDPOINT = 'https://app.kit.com/forms/9588347/subscriptions';
     let waitlistLastFocus = null;
+
+    function resetWaitlistModal() {
+      waitlistForm.reset();
+      waitlistFormView.hidden = false;
+      waitlistSuccessView.hidden = true;
+      waitlistError.hidden = true;
+      waitlistError.textContent = '';
+      waitlistForm.querySelector('[type="submit"]').disabled = false;
+    }
 
     function openWaitlistModal() {
       waitlistLastFocus = document.activeElement;
@@ -210,10 +241,56 @@
       waitlistModal.classList.remove('is-open');
       waitlistModal.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('waitlist-open');
+      resetWaitlistModal();
       if (waitlistLastFocus) {
         waitlistLastFocus.focus();
       }
     }
+
+    waitlistForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!waitlistEmail.validity.valid) {
+        waitlistError.textContent = 'Please enter a valid email address.';
+        waitlistError.hidden = false;
+        waitlistEmail.focus();
+        return;
+      }
+
+      const submitBtn = waitlistForm.querySelector('[type="submit"]');
+      submitBtn.disabled = true;
+      waitlistError.hidden = true;
+
+      try {
+        const response = await fetch(KIT_FORM_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+          },
+          body: new URLSearchParams({
+            email_address: waitlistEmail.value.trim(),
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === 'success') {
+          waitlistFormView.hidden = true;
+          waitlistSuccessView.hidden = false;
+          waitlistSuccessView.querySelector('.waitlist-modal__success-text').focus();
+          return;
+        }
+
+        waitlistError.textContent = 'Something went wrong. Please try again.';
+        waitlistError.hidden = false;
+      } catch {
+        waitlistError.textContent = 'Something went wrong. Please try again.';
+        waitlistError.hidden = false;
+      }
+
+      submitBtn.disabled = false;
+    });
 
     waitlistTriggers.forEach((trigger) => {
       trigger.addEventListener('click', openWaitlistModal);
